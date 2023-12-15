@@ -13,12 +13,12 @@ from exceptions import *
 
 try:
 
-    DATA_SET_SIZE = 15
-    BATCH_PERCENT = 0.9
+    DATA_SET_SIZE = 30
+    BATCH_PERCENT = 0.35
     EPOCHS = 500
     LEARNING_RATE = 0.01
     FEATURES_NUMBER = 1
-    NOISE = 0.2
+    NOISE = 0.02
     ACCURACY_COEFF = 0.3
 
     DATA_SET_SIZE = round(DATA_SET_SIZE)
@@ -143,11 +143,11 @@ finally:
 
         def __init__(self, inputsSize, outputSize):
             super().__init__()
-            self.lay1 = nn.Linear(in_features=inputsSize, out_features=round(DATA_SET_SIZE * 1.28))
-            self.lay2 = nn.Linear(in_features=round(DATA_SET_SIZE * 1.28), out_features=outputSize)
+            self.lay1 = nn.Linear(in_features=inputsSize, out_features=round(DATA_SET_SIZE * 6.4))
+            self.lay2 = nn.Linear(in_features=round(DATA_SET_SIZE * 6.4), out_features=outputSize)
 
         def forward(self, inputs):
-            inputs = t.relu(self.lay1(inputs))
+            inputs = t.sigmoid(self.lay1(inputs))
             outputs = self.lay2(inputs)
             return outputs
 
@@ -192,16 +192,16 @@ finally:
                 print(f'Epoch [{epoch+1}/{EPOCHS}], Loss: {loss.item()}, Accuracy: {finalAcc}')
                 inputs4show = inputs.detach().numpy()
                 outputs4show = outputs.detach().numpy()
-                plt.plot(inputs4show, np.exp(outputs4show))
-                plt.plot(inputs4show, np.exp(labels))
-                plt.show()
+                #plt.plot(inputs4show, outputs4show)
+                #plt.plot(inputs4show, labels)
+                #plt.show()
 
         if epoch == EPOCHS - 1:
             print(f'Epoch [{epoch+1}/{EPOCHS}], Loss: {loss.item()}, Accuracy: {finalAcc}')
             inputs4show = inputs.detach().numpy()
             outputs4show = outputs.detach().numpy()
-            plt.plot(inputs4show, np.exp(outputs4show))
-            plt.plot(inputs4show, np.exp(labels))
+            plt.plot(inputs4show, outputs4show)
+            plt.plot(inputs4show, labels)
             plt.show()
 
 
