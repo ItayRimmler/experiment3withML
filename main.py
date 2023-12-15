@@ -14,12 +14,12 @@ from exceptions import *
 try:
 
     DATA_SET_SIZE = 15
-    BATCH_PERCENT = 0.5
+    BATCH_PERCENT = 0.9
     EPOCHS = 500
     LEARNING_RATE = 0.01
     FEATURES_NUMBER = 1
-    NOISE = -1
-    ACCURACY = 0.3
+    NOISE = 0.2
+    ACCURACY_COEFF = 0.3
 
     DATA_SET_SIZE = round(DATA_SET_SIZE)
     EPOCHS = round(EPOCHS)
@@ -41,7 +41,7 @@ try:
     exceptionz.append(exception6)
     exception7 = 0 <= NOISE <= 1
     exceptionz.append(exception7)
-    exception8 = 0 < ACCURACY < 1
+    exception8 = 0 < ACCURACY_COEFF < 1
     exceptionz.append(exception8)
     exceptionz = np.array(exceptionz)
 
@@ -64,7 +64,7 @@ try:
     if not exception7:
         raise tooSmall(name='NOISE', b=NOISE)
     if not exception8:
-        raise tooSmall(name='NOISE', a=0.9999999999, b=NOISE)
+        raise tooSmall(name='ACCURACY_COEFF', a=0.9999999999, b=ACCURACY_COEFF)
 
 except tooSmall as e:
     if e.name == 'ALL':
@@ -74,7 +74,7 @@ except tooSmall as e:
         BATCH_SIZE = e.b
         LEARNING_RATE = e.b
         NOISE = e.b
-        ACCURACY = e.b - 0.0000000001
+        ACCURACY_COEFF = e.b - 0.0000000001
     if e.name == 'DATA_SET_SIZE':
         DATA_SET_SIZE = e.b
     if e.name == 'BATCH_PERCENT':
@@ -87,8 +87,8 @@ except tooSmall as e:
         LEARNING_RATE = e.b
     if e.name == 'NOISE':
         NOISE = e.b
-    if e.name == 'ACCURACY':
-        NOISE = e.b
+    if e.name == 'ACCURACY_COEFF':
+        ACCURACY_COEFF = e.b - 0.0000000001
     else:
         sys.exit()
 finally:
@@ -180,8 +180,8 @@ finally:
 
         # Calculating accuracy (I'm still not sure how can I do it better):
 
-        acc1 = t.gt(outputs, (1 - ACCURACY) * labels)
-        acc2 = t.gt((1 + ACCURACY) * labels, outputs)
+        acc1 = t.gt(outputs, (1 - ACCURACY_COEFF) * labels)
+        acc2 = t.gt((1 + ACCURACY_COEFF) * labels, outputs)
         acc = t.logical_and(acc1, acc2)
         trainAcc = t.sum(acc)
         finalAcc = trainAcc/BATCH_SIZE
